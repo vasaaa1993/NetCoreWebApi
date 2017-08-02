@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NetCoreWebApi.Extentions;
 
 namespace NetCoreWebApi
 {
@@ -37,7 +38,9 @@ namespace NetCoreWebApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+			loggerFactory.AddCustomLogger();
+
+			app.UseMvc();
         }
     }
 }
