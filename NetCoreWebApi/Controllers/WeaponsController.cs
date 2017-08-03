@@ -39,10 +39,10 @@ namespace NetCoreWebApi.Controllers
 
 		// POST api/weapons
 		[HttpPost]
-		public void Post([FromBody]Weapon value)
+		public void Post([FromBody]Weapon weapon)
 		{
-			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Add weapon with name = {value.Name}");
-			_weaponoService.Add(value);
+			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Add weapon with name = {weapon}");
+			_weaponoService.Add(weapon);
 		}
 
 		// DELETE api/weapons/5

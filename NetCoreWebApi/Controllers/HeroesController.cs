@@ -38,10 +38,10 @@ namespace NetCoreWebApi.Controllers
 
         // POST api/heroes
         [HttpPost]
-        public void Post([FromBody]Hero value)
+        public void Post([FromBody]Hero hero)
         {
-			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Add hero with name = {value.Name}");
-			_heroService.Add(value);
+			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Add hero with name = {hero.Name}");
+			_heroService.Add(hero);
         }
 
         // DELETE api/heroes/5
