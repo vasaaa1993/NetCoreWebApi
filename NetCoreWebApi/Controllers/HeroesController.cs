@@ -4,6 +4,7 @@ using NetCoreWebApi.Models;
 using NetCoreWebApi.Services;
 using Microsoft.Extensions.Logging;
 using NetCoreWebApi.Logger;
+using System.Threading.Tasks;
 
 namespace NetCoreWebApi.Controllers
 {
@@ -20,36 +21,36 @@ namespace NetCoreWebApi.Controllers
 		}
         // GET api/heroes
         [HttpGet]
-        public IEnumerable<Hero> Get()
+        public async Task<IEnumerable<Hero>> Get()
         {
 			_logger.LogInformation(LoggingEvents.GET_ITEM,"Getting all heroes");
 
-			return _heroService.GetAll();
+			return await _heroService.GetAll();
 
         }
 
         // GET api/heroes/5
         [HttpGet("{id}")]
-        public Hero Get(int id)
+        public async Task<Hero> Get(int id)
         {
 			_logger.LogInformation(LoggingEvents.GET_ITEM, $"Getting hero with id = {id}");
-			return _heroService.Get(id); ;
+			return await _heroService.Get(id); ;
         }
 
         // POST api/heroes
         [HttpPost]
-        public void Post([FromBody]Hero hero)
+        public async void Post([FromBody]Hero hero)
         {
 			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Add hero with name = {hero.Name}");
-			_heroService.Add(hero);
+			await _heroService.Add(hero);
         }
 
         // DELETE api/heroes/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async void Delete(int id)
         {
 			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Delete hero with id = {id}");
-			_heroService.Delete(id);
+			await _heroService.Delete(id);
         }
     }
 }

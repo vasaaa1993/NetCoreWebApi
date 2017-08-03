@@ -1,7 +1,9 @@
-﻿using NetCoreWebApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NetCoreWebApi.Data;
 using NetCoreWebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NetCoreWebApi.Services
 {
@@ -13,34 +15,43 @@ namespace NetCoreWebApi.Services
 			_context = context;
 		}
 
-		public void Add(Hero item)
+		public async Task<IEnumerable<Hero>> GetAll()
 		{
-			_context.Heroes.Add(item);
-			_context.SaveChanges();
+			return await _context.Heroes.ToArrayAsync();
 		}
 
-		public void ClearAll()
+		public async Task<bool> ClearAll()
 		{
-			_context.Heroes.RemoveRange(_context.Heroes);
-			_context.SaveChanges();
+			return await Task.Run(() => {
+				_context.Heroes.RemoveRange(_context.Heroes);
+				return true;
+			});
 		}
 
-		public void Delete(int id)
+		public async Task<Hero> Get(int id)
 		{
-			var hero = _context.Heroes.FirstOrDefault(h => h.HeroId == id);
-			if (hero != null)
-				_context.Heroes.Remove(hero);
-			_context.SaveChanges();
+			return await _context.Heroes.FirstOrDefaultAsync(h => h.HeroId == id);
 		}
 
-		public Hero Get(int id)
+		public async Task<bool> Delete(int id)
 		{
-			return _context.Heroes.FirstOrDefault(h => h.HeroId == id);
+			var hero = await _context.Heroes.FirstOrDefaultAsync(h => h.HeroId == id);
+			return await Task.Run(() =>
+			{
+				if (hero != null)
+				{
+					_context.Heroes.Remove(hero);
+					return true;
+				}
+				return false;
+			});
+
 		}
 
-		public IEnumerable<Hero> GetAll()
+		public async Task<Hero> Add(Hero item)
 		{
-			return _context.Heroes.ToList();
+			return await Task.Run(() => { return item != null ? _context.Heroes.Add(item).Entity : null; });
 		}
+
 	}
 }

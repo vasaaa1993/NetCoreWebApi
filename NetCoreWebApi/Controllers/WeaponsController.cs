@@ -4,6 +4,7 @@ using NetCoreWebApi.Models;
 using NetCoreWebApi.Services;
 using Microsoft.Extensions.Logging;
 using NetCoreWebApi.Logger;
+using System.Threading.Tasks;
 
 namespace NetCoreWebApi.Controllers
 {
@@ -21,36 +22,36 @@ namespace NetCoreWebApi.Controllers
 
 		// GET api/weapons
 		[HttpGet]
-		public IEnumerable<Weapon> Get()
+		public async Task<IEnumerable<Weapon>> Get()
 		{
 			_logger.LogInformation(LoggingEvents.GET_ITEM, "Getting all weapons");
 
-			return _weaponoService.GetAll();
+			return await _weaponoService.GetAll();
 
 		}
 
 		// GET api/weapons/5
 		[HttpGet("{id}")]
-		public Weapon Get(int id)
+		public async Task<Weapon> Get(int id)
 		{
 			_logger.LogInformation(LoggingEvents.GET_ITEM, $"Getting weapon with id = {id}");
-			return _weaponoService.Get(id); ;
+			return await _weaponoService.Get(id); ;
 		}
 
 		// POST api/weapons
 		[HttpPost]
-		public void Post([FromBody]Weapon weapon)
+		public async void Post([FromBody]Weapon weapon)
 		{
 			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Add weapon with name = {weapon}");
-			_weaponoService.Add(weapon);
+			await _weaponoService.Add(weapon);
 		}
 
 		// DELETE api/weapons/5
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		public async void Delete(int id)
 		{
 			_logger.LogInformation(LoggingEvents.POST_ITEM, $"Delete weapon with id = {id}");
-			_weaponoService.Delete(id);
+			await _weaponoService.Delete(id);
 		}
 	}
 }

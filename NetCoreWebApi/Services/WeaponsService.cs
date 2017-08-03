@@ -1,8 +1,10 @@
-﻿using NetCoreWebApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NetCoreWebApi.Data;
 using NetCoreWebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NetCoreWebApi.Services
 {
@@ -16,34 +18,42 @@ namespace NetCoreWebApi.Services
 			_context = context;
 		}
 
-		public IEnumerable<Weapon> GetAll()
+		public async Task<IEnumerable<Weapon>> GetAll()
 		{
-			return _context.Weapons.ToList();
+			return await _context.Weapons.ToArrayAsync();
 		}
 
-		public void Add(Weapon item)
+		public async Task<bool> ClearAll()
 		{
-			_context.Weapons.Add(item);
-			_context.SaveChanges();
+			return await Task.Run(() => {
+				_context.Weapons.RemoveRange(_context.Weapons);
+				return true;
+			});
 		}
 
-		public void ClearAll()
+		public async Task<Weapon> Get(int id)
 		{
-			_context.Weapons.RemoveRange(_context.Weapons);
-			_context.SaveChanges();
+			return await _context.Weapons.FirstOrDefaultAsync(w => w.WeaponId == id);
 		}
 
-		public void Delete(int id)
+		public async Task<bool> Delete(int id)
 		{
-			var weapon = _context.Weapons.FirstOrDefault(w => w.WeaponId == id);
-			if (weapon != null)
-				_context.Weapons.Remove(weapon);
-			_context.SaveChanges();
+			var weapon = await _context.Weapons.FirstOrDefaultAsync(w => w.WeaponId == id);
+			return await Task.Run(() =>
+			{
+				if (weapon != null)
+				{
+					_context.Weapons.Remove(weapon);
+					return true;
+				}
+				return false;
+			});
+
 		}
 
-		public Weapon Get(int id)
+		public async Task<Weapon> Add(Weapon item)
 		{
-			return _context.Weapons.FirstOrDefault(w => w.WeaponId == id);
+			return await Task.Run(() => { return item != null ? _context.Weapons.Add(item).Entity : null; });
 		}
 
 		private bool _disposed;
