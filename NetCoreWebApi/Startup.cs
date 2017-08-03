@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetCoreWebApi.Extentions;
+using NetCoreWebApi.Data;
 
 namespace NetCoreWebApi
 {
@@ -21,7 +23,8 @@ namespace NetCoreWebApi
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-        }
+
+		}
 
         public IConfigurationRoot Configuration { get; }
 
@@ -30,15 +33,20 @@ namespace NetCoreWebApi
         {
             // Add framework services.
             services.AddMvc();
-        }
+
+			services.AddDbContext<HeroesContext>(options =>
+			  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, HeroesContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
 			loggerFactory.AddCustomLogger();
+
+			HeroesDbInitializer.Initialize(context);
 
 			app.UseMvc();
         }
