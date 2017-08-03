@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace NetCoreWebApi.Logger
 {
@@ -36,7 +34,7 @@ namespace NetCoreWebApi.Logger
 
 			if (_config.EventId == 0 || _config.EventId == eventId.Id)
 			{
-				Console.WriteLine($"Custom logger: {logLevel.ToString()} - {eventId.Id} - {_name} - {formatter(state, exception)}");
+				Debug.WriteLine($"CUSTOM LOGGER: {state.ToString()}");
 			}
 		}
 	}

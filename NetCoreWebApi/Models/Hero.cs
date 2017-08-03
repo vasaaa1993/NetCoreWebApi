@@ -10,7 +10,6 @@ namespace NetCoreWebApi.Models
 		public int HeroId { get; set; }
 		public string Name { get; set; }
 		public int Level { get; set; }
-
-		public List<Weapon> Weapon { get; set; }
+		public IEnumerable<Weapon> Weapon { get; set; }
 	}
 }

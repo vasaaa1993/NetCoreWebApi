@@ -39,11 +39,15 @@ namespace NetCoreWebApi.Migrations
 
                     b.Property<int?>("HeroId");
 
+                    b.Property<int?>("HeroId1");
+
                     b.Property<string>("Name");
 
                     b.HasKey("WeaponId");
 
                     b.HasIndex("HeroId");
+
+                    b.HasIndex("HeroId1");
 
                     b.ToTable("Weapons");
                 });
@@ -53,6 +57,10 @@ namespace NetCoreWebApi.Migrations
                     b.HasOne("NetCoreWebApi.Models.Hero")
                         .WithMany("Weapon")
                         .HasForeignKey("HeroId");
+
+                    b.HasOne("NetCoreWebApi.Models.Hero")
+                        .WithMany()
+                        .HasForeignKey("HeroId1");
                 });
         }
     }

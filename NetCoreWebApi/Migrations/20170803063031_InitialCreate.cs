@@ -10,53 +10,53 @@ namespace NetCoreWebApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Weapons",
-                columns: table => new
-                {
-                    WeaponId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Damage = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Weapons", x => x.WeaponId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Heroes",
                 columns: table => new
                 {
                     HeroId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Level = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    WeaponId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Heroes", x => x.HeroId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Weapons",
+                columns: table => new
+                {
+                    WeaponId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Damage = table.Column<int>(nullable: false),
+                    HeroId = table.Column<int>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weapons", x => x.WeaponId);
                     table.ForeignKey(
-                        name: "FK_Heroes_Weapons_WeaponId",
-                        column: x => x.WeaponId,
-                        principalTable: "Weapons",
-                        principalColumn: "WeaponId",
+                        name: "FK_Weapons_Heroes_HeroId",
+                        column: x => x.HeroId,
+                        principalTable: "Heroes",
+                        principalColumn: "HeroId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Heroes_WeaponId",
-                table: "Heroes",
-                column: "WeaponId");
+                name: "IX_Weapons_HeroId",
+                table: "Weapons",
+                column: "HeroId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Heroes");
+                name: "Weapons");
 
             migrationBuilder.DropTable(
-                name: "Weapons");
+                name: "Heroes");
         }
     }
 }

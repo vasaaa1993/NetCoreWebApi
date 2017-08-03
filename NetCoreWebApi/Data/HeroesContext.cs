@@ -16,5 +16,9 @@ namespace NetCoreWebApi.Data
 		public DbSet<Hero> Heroes { get; set; }
 		public DbSet<Weapon> Weapons { get; set; }
 
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Hero>().HasMany<Weapon>();
+		}
 	}
 }

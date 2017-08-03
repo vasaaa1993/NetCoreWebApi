@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace NetCoreWebApi.Data
 {
-    public static class HeroesDbInitializer
-    {
+	public static class HeroesDbInitializer
+	{
 		public static void Initialize(HeroesContext context)
 		{
 			context.Database.EnsureCreated();

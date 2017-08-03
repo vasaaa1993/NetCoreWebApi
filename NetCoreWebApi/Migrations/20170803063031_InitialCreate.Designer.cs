@@ -8,8 +8,8 @@ using NetCoreWebApi.Data;
 namespace NetCoreWebApi.Migrations
 {
     [DbContext(typeof(HeroesContext))]
-    [Migration("20170803032159_ChangedReletionFromHeroToWeaponToOne2Many")]
-    partial class ChangedReletionFromHeroToWeaponToOne2Many
+    [Migration("20170803063031_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,7 @@ namespace NetCoreWebApi.Migrations
             modelBuilder.Entity("NetCoreWebApi.Models.Weapon", b =>
                 {
                     b.HasOne("NetCoreWebApi.Models.Hero")
-                        .WithMany("Weapon")
+                        .WithMany()
                         .HasForeignKey("HeroId");
                 });
         }

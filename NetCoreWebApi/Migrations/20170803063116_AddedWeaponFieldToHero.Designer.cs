@@ -8,8 +8,8 @@ using NetCoreWebApi.Data;
 namespace NetCoreWebApi.Migrations
 {
     [DbContext(typeof(HeroesContext))]
-    [Migration("20170803031634_AddedIdenityAttToModels")]
-    partial class AddedIdenityAttToModels
+    [Migration("20170803063116_AddedWeaponFieldToHero")]
+    partial class AddedWeaponFieldToHero
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,7 @@ namespace NetCoreWebApi.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("WeaponId");
-
                     b.HasKey("HeroId");
-
-                    b.HasIndex("WeaponId");
 
                     b.ToTable("Heroes");
                 });
@@ -42,18 +38,30 @@ namespace NetCoreWebApi.Migrations
 
                     b.Property<int>("Damage");
 
+                    b.Property<int?>("HeroId");
+
+                    b.Property<int?>("HeroId1");
+
                     b.Property<string>("Name");
 
                     b.HasKey("WeaponId");
 
+                    b.HasIndex("HeroId");
+
+                    b.HasIndex("HeroId1");
+
                     b.ToTable("Weapons");
                 });
 
-            modelBuilder.Entity("NetCoreWebApi.Models.Hero", b =>
+            modelBuilder.Entity("NetCoreWebApi.Models.Weapon", b =>
                 {
-                    b.HasOne("NetCoreWebApi.Models.Weapon", "Weapon")
+                    b.HasOne("NetCoreWebApi.Models.Hero")
+                        .WithMany("Weapon")
+                        .HasForeignKey("HeroId");
+
+                    b.HasOne("NetCoreWebApi.Models.Hero")
                         .WithMany()
-                        .HasForeignKey("WeaponId");
+                        .HasForeignKey("HeroId1");
                 });
         }
     }

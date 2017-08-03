@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetCoreWebApi.Extentions;
 using NetCoreWebApi.Data;
+using NetCoreWebApi.Services;
+using NetCoreWebApi.Models;
 
 namespace NetCoreWebApi
 {
@@ -36,6 +38,8 @@ namespace NetCoreWebApi
 
 			services.AddDbContext<HeroesContext>(options =>
 			  options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+			services.AddTransient<IHeroService, HeroesService>();
+			services.AddTransient<WeaponsService>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +48,10 @@ namespace NetCoreWebApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-			loggerFactory.AddCustomLogger();
+			loggerFactory.AddCustomLogger(c =>
+			{
+				c.LogLevel = LogLevel.Information;
+			});
 
 			HeroesDbInitializer.Initialize(context);
 
