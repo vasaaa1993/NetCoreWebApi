@@ -3,7 +3,6 @@ using NetCoreWebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NetCoreWebApi.Services
 {
@@ -36,16 +35,15 @@ namespace NetCoreWebApi.Services
 
 		public void Delete(int id)
 		{
-			var hero = _context.Weapons.FirstOrDefault(w => w.WeaponId == id);
-			if (hero != null)
-				_context.Weapons.Remove(hero);
+			var weapon = _context.Weapons.FirstOrDefault(w => w.WeaponId == id);
+			if (weapon != null)
+				_context.Weapons.Remove(weapon);
 			_context.SaveChanges();
 		}
 
 		public Weapon Get(int id)
 		{
 			return _context.Weapons.FirstOrDefault(w => w.WeaponId == id);
-			_context.SaveChanges();
 		}
 
 		private bool _disposed;

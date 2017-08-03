@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NetCoreWebApi.Data;
+﻿using NetCoreWebApi.Data;
 using NetCoreWebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NetCoreWebApi.Services
 {
