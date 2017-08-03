@@ -23,12 +23,10 @@ namespace NetCoreWebApi.Services
 			return await _context.Weapons.ToArrayAsync();
 		}
 
-		public async Task<bool> ClearAll()
+		public async Task<int> ClearAll()
 		{
-			return await Task.Run(() => {
-				_context.Weapons.RemoveRange(_context.Weapons);
-				return true;
-			});
+			_context.Weapons.RemoveRange(_context.Weapons);
+			return await _context.SaveChangesAsync();
 		}
 
 		public async Task<Weapon> Get(int id)
@@ -36,24 +34,20 @@ namespace NetCoreWebApi.Services
 			return await _context.Weapons.FirstOrDefaultAsync(w => w.WeaponId == id);
 		}
 
-		public async Task<bool> Delete(int id)
+		public async Task<int> Delete(int id)
 		{
 			var weapon = await _context.Weapons.FirstOrDefaultAsync(w => w.WeaponId == id);
-			return await Task.Run(() =>
-			{
-				if (weapon != null)
-				{
-					_context.Weapons.Remove(weapon);
-					return true;
-				}
-				return false;
-			});
+			if (weapon != null)
+				_context.Weapons.Remove(weapon);
+			return await _context.SaveChangesAsync();
 
 		}
 
-		public async Task<Weapon> Add(Weapon item)
+		public async Task<int> Add(Weapon item)
 		{
-			return await Task.Run(() => { return item != null ? _context.Weapons.Add(item).Entity : null; });
+			if (item != null)
+				_context.Weapons.Add(item);
+			return await _context.SaveChangesAsync();
 		}
 
 		private bool _disposed;
@@ -62,10 +56,10 @@ namespace NetCoreWebApi.Services
 		{
 			if (!_disposed)
 			{
-				//if (disposing)
-				//{
-				//	_ctx.Dispose();
-				//}
+				if (disposing)
+				{
+					_context.Dispose();
+				}
 				_disposed = true;
 			}
 		}

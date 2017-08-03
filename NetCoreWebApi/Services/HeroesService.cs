@@ -20,12 +20,10 @@ namespace NetCoreWebApi.Services
 			return await _context.Heroes.ToArrayAsync();
 		}
 
-		public async Task<bool> ClearAll()
+		public async Task<int> ClearAll()
 		{
-			return await Task.Run(() => {
-				_context.Heroes.RemoveRange(_context.Heroes);
-				return true;
-			});
+			_context.Heroes.RemoveRange(_context.Heroes);
+			return await _context.SaveChangesAsync();
 		}
 
 		public async Task<Hero> Get(int id)
@@ -33,24 +31,20 @@ namespace NetCoreWebApi.Services
 			return await _context.Heroes.FirstOrDefaultAsync(h => h.HeroId == id);
 		}
 
-		public async Task<bool> Delete(int id)
+		public async Task<int> Delete(int id)
 		{
 			var hero = await _context.Heroes.FirstOrDefaultAsync(h => h.HeroId == id);
-			return await Task.Run(() =>
-			{
-				if (hero != null)
-				{
-					_context.Heroes.Remove(hero);
-					return true;
-				}
-				return false;
-			});
+			if (hero != null)
+				_context.Heroes.Remove(hero);
+			return await _context.SaveChangesAsync();
 
 		}
 
-		public async Task<Hero> Add(Hero item)
+		public async Task<int> Add(Hero item)
 		{
-			return await Task.Run(() => { return item != null ? _context.Heroes.Add(item).Entity : null; });
+			if (item != null)
+				_context.Heroes.Add(item);
+			return await _context.SaveChangesAsync();
 		}
 
 	}
